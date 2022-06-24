@@ -7,6 +7,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
+
 @Setter@Getter
 @Embeddable
 public class CommentId implements Serializable {
@@ -26,5 +28,18 @@ public class CommentId implements Serializable {
 
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CommentId commentId = (CommentId) o;
+        return Objects.equals(this.customerId, commentId.customerId) &&
+                Objects.equals(this.productId, commentId.productId) &&
+                Objects.equals(this.timeStamp, commentId.timeStamp);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(customerId, productId, timeStamp);
+    }
 }

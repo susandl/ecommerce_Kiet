@@ -1,13 +1,12 @@
 package com.example.ecommerce_backend.Data.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "comment")
 public class Comment {
     @EmbeddedId
@@ -33,5 +32,38 @@ public class Comment {
     }
 
     public Comment() {
+    }
+
+    public CommentId getId() {
+        return id;
+    }
+
+    public void setId(CommentId id) {
+        this.id = id;
+    }
+
+    @JsonBackReference
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+    @JsonBackReference
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
     }
 }

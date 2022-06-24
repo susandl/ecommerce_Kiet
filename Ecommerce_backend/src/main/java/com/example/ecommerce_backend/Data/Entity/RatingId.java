@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -28,5 +29,16 @@ public class RatingId implements Serializable {
 
     }
 
-
+    @Override
+    public boolean equals(Object o){
+        if(o == null) return false;
+        if(!(o instanceof RatingId ratingId)) return false;
+        return Objects.equals(getCustomerId(),ratingId.getCustomerId()) &&
+                Objects.equals(getProductId(),ratingId.getProductId()) &&
+                Objects.equals(getTimeStamp(),ratingId.getTimeStamp());
+    }
+    @Override
+    public int hashCode(){
+        return Objects.hash(getCustomerId(),getProductId(),getTimeStamp());
+    }
 }
