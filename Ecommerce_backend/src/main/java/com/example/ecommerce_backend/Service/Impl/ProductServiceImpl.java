@@ -20,6 +20,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
+
     @Override
     public List<Product> getProducts() {
         return productRepository.findAll();
@@ -49,16 +50,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void createProduct(ProductRequestDto productRequestDto) {
-        Converter<ProductRequestDto,Product> productConverter = mappingContext -> {
-            ProductRequestDto dto = mappingContext.getSource();
-            Product product = mappingContext.getDestination();
-            Optional<Category> category = Optional.ofNullable(categoryRepository.findByName(dto.getCategoryName()));
-            product.setName(dto.getName());
-            product.setDetails(dto.getDetails());
-            product.setCategory(category.get());
-            return product;
-        };
-        modelMapper.addConverter(productConverter);
         Product product = modelMapper.map(productRequestDto,Product.class);
         productRepository.save(product);
     }
@@ -67,10 +58,6 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProductById(Long id) {
         productRepository.deleteById(id);
     }
-
-
-
-
 
     @Autowired
     public ProductServiceImpl(ProductRepository productRepository,CategoryRepository categoryRepository,ModelMapper modelMapper){

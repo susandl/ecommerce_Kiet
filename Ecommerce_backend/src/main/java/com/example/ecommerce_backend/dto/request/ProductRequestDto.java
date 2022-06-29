@@ -14,18 +14,18 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductRequestDto {
+    private Long id;
     @NotEmpty(message = "Product name must be not empty")
     private String name;
     private String details;
-    @NotNull
-    private String categoryName;
+    private Long categoryId;
 
     @Override
     public String toString() {
         return "ProductRequestDto{" +
                 "name='" + name + '\'' +
                 ", details='" + details + '\'' +
-                ", categoryName=" + categoryName +
+                ", categoryId=" + categoryId +
                 '}';
     }
 }
