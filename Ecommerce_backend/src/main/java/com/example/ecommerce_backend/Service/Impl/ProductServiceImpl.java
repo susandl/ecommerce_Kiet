@@ -18,7 +18,6 @@ import java.util.Optional;
 @Service
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final CategoryRepository categoryRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -60,10 +59,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository,CategoryRepository categoryRepository,ModelMapper modelMapper){
+    public ProductServiceImpl(ProductRepository productRepository,ModelMapper modelMapper){
         this.productRepository=productRepository;
         this.modelMapper=modelMapper;
-        this.categoryRepository=categoryRepository;
     }
 
 }
