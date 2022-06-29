@@ -10,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "product")
+@NamedQuery(name = "Product.findAllProductByCategoryName",query = "select p from Product p join fetch p.category where p.category.name=?1")
 public class Product {
     private Long id;
     private String name;
@@ -58,7 +59,7 @@ public class Product {
         this.category = category;
     }
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     @JsonManagedReference
     public List<Comment> getCommentList() {
         return commentList;
@@ -67,12 +68,22 @@ public class Product {
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
     }
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product",fetch = FetchType.LAZY)
     @JsonManagedReference
     public List<Rating> getRatingList() {
         return ratingList;
     }
     public void setRatingList(List<Rating> ratingList) {
         this.ratingList = ratingList;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", details='" + details + '\'' +
+                ", category=" + category +
+                '}';
     }
 }

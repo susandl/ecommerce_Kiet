@@ -8,19 +8,16 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-
 @Table(name = "category")
 public class Category {
     private Long id;
     private String name;
     private String details;
     private List<Product> productList;
+
     public Category(){
     }
-    public Category(String name,String details){
-        this.name=name;
-        this.details=details;
-    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
@@ -31,6 +28,7 @@ public class Category {
     public void setId(Long id) {
         this.id = id;
     }
+
     @Column(name = "category_name")
     public String getName() {
         return name;
@@ -39,6 +37,7 @@ public class Category {
     public void setName(String name) {
         this.name = name;
     }
+
     @Column(name = "category_details")
     public String getDetails() {
         return details;
@@ -47,7 +46,8 @@ public class Category {
     public void setDetails(String details) {
         this.details = details;
     }
-    @OneToMany(mappedBy = "category")
+
+    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY)
     @JsonManagedReference
     public List<Product> getProductList() {
         return productList;
