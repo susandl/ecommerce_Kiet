@@ -19,10 +19,11 @@ public class RatingId implements Serializable {
     private Long productId;
     @Column(name = "rating_date")
     private LocalDateTime timeStamp;
-    public RatingId(Long customerId,Long productId){
+
+    public RatingId(Long customerId, Long productId) {
         this.timeStamp = LocalDateTime.now();
-        this.customerId=customerId;
-        this.productId=productId;
+        this.customerId = customerId;
+        this.productId = productId;
     }
 
     public RatingId() {
@@ -30,15 +31,16 @@ public class RatingId implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o == null) return false;
-        if(!(o instanceof RatingId ratingId)) return false;
-        return Objects.equals(getCustomerId(),ratingId.getCustomerId()) &&
-                Objects.equals(getProductId(),ratingId.getProductId()) &&
-                Objects.equals(getTimeStamp(),ratingId.getTimeStamp());
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (!(o instanceof RatingId ratingId)) return false;
+        return Objects.equals(getCustomerId(), ratingId.getCustomerId()) &&
+                Objects.equals(getProductId(), ratingId.getProductId()) &&
+                Objects.equals(getTimeStamp(), ratingId.getTimeStamp());
     }
+
     @Override
-    public int hashCode(){
-        return Objects.hash(getCustomerId(),getProductId(),getTimeStamp());
+    public int hashCode() {
+        return Objects.hash(getCustomerId(), getProductId(), getTimeStamp());
     }
 }

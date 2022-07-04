@@ -4,8 +4,8 @@ import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
 import com.example.ecommerce_backend.Exception.CustomerNotFound;
 import com.example.ecommerce_backend.Service.CustomerService;
-import com.example.ecommerce_backend.dto.request.CustomerRequestDto;
-import com.example.ecommerce_backend.dto.response.CustomerResponseDto;
+import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
+import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,50 +21,66 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public List<Customer> getAllCustomer() {
-        List<Customer> customers =  customerRepository.findAll();
-        if (customers.isEmpty())
-            throw new CustomerNotFound();
-        return customers;
-    }
-
-    @Override
-    public Customer getCustomerById(Long id) {
-        Optional<Customer> customerOptional = customerRepository.findById(id);
-        if (customerOptional.isPresent())
-            return customerOptional.get();
-        else
-            throw new CustomerNotFound(id);
-    }
-
-    @Override
-    public List<CustomerResponseDto> getAllCustomerDto() {
-        List<Customer> customers = customerRepository.findAll();
-        if (!customers.isEmpty()){
-        Type listType = new TypeToken<List<CustomerResponseDto>>() {
-        }.getType();
-        List<CustomerResponseDto> customersDto = modelMapper.map(customers, listType);
-        customersDto.forEach(customerResponseDto -> System.out.println(customerResponseDto.getName()));
-        return customersDto;
-        }
-        throw new CustomerNotFound();
-    }
-
-    @Override
-    public void createCustomer(CustomerRequestDto customerDto) {
-        Customer customer= modelMapper.map(customerDto,Customer.class);
-        customerRepository.save(customer);
-    }
-
-    @Override
-    public void deleteCustomerById(Long id) {
-        customerRepository.deleteById(id);
-    }
-
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
         this.customerRepository = customerRepository;
     }
+
+    @Override
+    public List<CustomerResponseDto> getAllCustomer() {
+        List<Customer> customers = customerRepository.findAll();
+        if (customers.isEmpty())
+            throw new CustomerNotFound("Customer List not found");
+        Type listType = new TypeToken<List<CustomerResponseDto>>() {
+        }.getType();
+        List<CustomerResponseDto> customerResponseDtos = modelMapper.map(customers, listType);
+        return customerResponseDtos;
+    }
+
+    @Override
+    public CustomerResponseDto getCustomerByName(String name) {
+        Optional<Customer> customerOptional = Optional.ofNullable(customerRepository.findByName(name));
+        if (customerOptional.isEmpty()) {
+            throw new CustomerNotFound("Customer " + name + " not found");
+        }
+        CustomerResponseDto customerResponseDto = this.modelMapper.map(customerOptional.get(), CustomerResponseDto.class);
+        return customerResponseDto;
+    }
+
+    @Override
+    public CustomerResponseDto getCustomerByNameAndPass(String name, String pass) {
+        Optional<Customer> customerOptional = Optional.ofNullable(customerRepository.findByNameAndPass(name, pass));
+        if (customerOptional.isEmpty()) {
+            throw new CustomerNotFound("Customer " + name + " not found");
+        }
+        CustomerResponseDto customerResponseDto = this.modelMapper.map(customerOptional.get(), CustomerResponseDto.class);
+        return customerResponseDto;
+    }
+
+    @Override
+    public void createCustomer(CustomerRequestDto customerDto) {
+        if (check(customerDto.getName())) {
+            throw new CustomerNotFound("customer " + customerDto.getName() + " exists");
+        }
+        Customer customer = modelMapper.map(customerDto, Customer.class);
+        customerRepository.save(customer);
+    }
+
+    @Override
+    public void deleteCustomerByName(String name) {
+        if (check(name)) {
+            throw new CustomerNotFound("customer " + name + " exists");
+        }
+        customerRepository.deleteCustomerByName(name);
+    }
+
+    private boolean check(String name) {
+        List<Customer> customers = this.customerRepository.findAll();
+        for (Customer customer : customers) {
+            return customer.getName().equals(name);
+        }
+        return false;
+    }
+
 }

@@ -15,7 +15,7 @@ public class Category {
     private String details;
     private List<Product> productList;
 
-    public Category(){
+    public Category() {
     }
 
     @Id
@@ -47,7 +47,7 @@ public class Category {
         this.details = details;
     }
 
-    @OneToMany(mappedBy = "category",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     @JsonManagedReference
     public List<Product> getProductList() {
         return productList;

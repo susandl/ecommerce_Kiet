@@ -1,13 +1,11 @@
-package com.example.ecommerce_backend.dto.request;
+package com.example.ecommerce_backend.Dto.Request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

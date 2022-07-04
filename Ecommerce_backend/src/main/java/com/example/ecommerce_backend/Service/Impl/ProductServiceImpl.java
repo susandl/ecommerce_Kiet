@@ -1,17 +1,20 @@
 package com.example.ecommerce_backend.Service.Impl;
 
-import com.example.ecommerce_backend.Data.Entity.Category;
+import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Entity.Product;
-import com.example.ecommerce_backend.Data.Repo.CategoryRepository;
 import com.example.ecommerce_backend.Data.Repo.ProductRepository;
+import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
+import com.example.ecommerce_backend.Exception.CustomerNotFound;
 import com.example.ecommerce_backend.Exception.ProductNotFound;
 import com.example.ecommerce_backend.Service.ProductService;
-import com.example.ecommerce_backend.dto.request.ProductRequestDto;
-import com.example.ecommerce_backend.dto.response.ProductResponseDto;
-import org.modelmapper.Converter;
+import com.example.ecommerce_backend.Dto.Request.ProductRequestDto;
+import com.example.ecommerce_backend.Dto.Response.ProductResponseDto;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,36 +23,48 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
-    @Override
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    @Autowired
+    public ProductServiceImpl(ProductRepository productRepository, ModelMapper modelMapper) {
+        this.productRepository = productRepository;
+        this.modelMapper = modelMapper;
     }
 
     @Override
-    public Product getProductByName(String name) {
-        return productRepository.getProductByName(name);
-    }
-
-    @Override
-    public List<Product> getProductsByCategoryName(String name) {
-        return productRepository.findAllProductByCategoryName(name);
-    }
-
-    @Override
-    public ProductResponseDto getProductDtoByName(String name) {
-        Optional<Product> p = Optional.ofNullable(productRepository.getProductByName(name));
-        if(p.isPresent()) {
-            System.out.println("Product dto\n"+p.toString()+"\n\n");
-            Product p1 = p.get();
-            ProductResponseDto productResponseDto= modelMapper.map(p1, ProductResponseDto.class);
-            return  productResponseDto;
+    public List<ProductResponseDto> getProductsByCategoryName(String name) {
+        List<Product> products = productRepository.findAllProductByCategoryName(name);
+        if (products.isEmpty()) {
+            throw new ProductNotFound("Product List not found");
         }
-        else throw new ProductNotFound(name);
+        Type listType = new TypeToken<List<ProductResponseDto>>() {
+        }.getType();
+        List<ProductResponseDto> productResponseDtos = modelMapper.map(products, listType);
+        return productResponseDtos;
+    }
+
+    @Override
+    public ProductResponseDto getProductByName(String name) {
+        Optional<Product> product = Optional.ofNullable(productRepository.getProductByName(name));
+        if (product.isEmpty()) {
+            throw new ProductNotFound(name);
+        }
+        ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
+        return productResponseDto;
+    }
+
+    @Override
+    public List<ProductResponseDto> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+        if (products.isEmpty())
+            throw new ProductNotFound("Product List not found");
+        Type listType = new TypeToken<List<ProductResponseDto>>() {
+        }.getType();
+        List<ProductResponseDto> productResponseDtos = modelMapper.map(products, listType);
+        return productResponseDtos;
     }
 
     @Override
     public void createProduct(ProductRequestDto productRequestDto) {
-        Product product = modelMapper.map(productRequestDto,Product.class);
+        Product product = modelMapper.map(productRequestDto, Product.class);
         productRepository.save(product);
     }
 
@@ -58,10 +73,5 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(id);
     }
 
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository,ModelMapper modelMapper){
-        this.productRepository=productRepository;
-        this.modelMapper=modelMapper;
-    }
 
 }

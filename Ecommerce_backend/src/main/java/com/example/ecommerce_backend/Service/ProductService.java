@@ -1,17 +1,19 @@
 package com.example.ecommerce_backend.Service;
 
 import com.example.ecommerce_backend.Data.Entity.Product;
-import com.example.ecommerce_backend.dto.request.ProductRequestDto;
-import com.example.ecommerce_backend.dto.response.ProductResponseDto;
+import com.example.ecommerce_backend.Dto.Request.ProductRequestDto;
+import com.example.ecommerce_backend.Dto.Response.ProductResponseDto;
 
 import java.util.List;
 
 public interface ProductService {
-    List<Product> getProducts();
+    List<ProductResponseDto> getAllProducts();
 
-    Product getProductByName(String name);
-    List<Product> getProductsByCategoryName(String name);
-    ProductResponseDto getProductDtoByName(String name);
+    List<ProductResponseDto> getProductsByCategoryName(String name);
+
+    ProductResponseDto getProductByName(String name);
+
     void createProduct(ProductRequestDto productRequestDto);
+
     void deleteProductById(Long id);
 }

@@ -15,6 +15,7 @@ public class Customer {
     private String pass;
     private List<Comment> commentList;
     private List<Rating> ratingList;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
@@ -25,6 +26,7 @@ public class Customer {
     public void setId(Long id) {
         this.id = id;
     }
+
     @Column(name = "customer_name")
     public String getName() {
         return name;
@@ -33,6 +35,7 @@ public class Customer {
     public void setName(String name) {
         this.name = name;
     }
+
     @Column(name = "customer_pass")
     public String getPass() {
         return pass;
@@ -41,8 +44,9 @@ public class Customer {
     public void setPass(String pass) {
         this.pass = pass;
     }
+
     @JsonManagedReference
-    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     public List<Comment> getCommentList() {
         return commentList;
     }
@@ -50,8 +54,9 @@ public class Customer {
     public void setCommentList(List<Comment> commentList) {
         this.commentList = commentList;
     }
+
     @JsonManagedReference
-    @OneToMany(mappedBy = "customer",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
     public List<Rating> getRatingList() {
         return ratingList;
     }
@@ -60,10 +65,12 @@ public class Customer {
         this.ratingList = ratingList;
     }
 
-    public Customer(){}
-    public Customer(String name,String pass){
-        this.name=name;
-        this.pass=pass;
+    public Customer() {
+    }
+
+    public Customer(String name, String pass) {
+        this.name = name;
+        this.pass = pass;
     }
 
 }

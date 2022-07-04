@@ -24,8 +24,8 @@ public class Comment {
     @Column(name = "comment_details")
     private String details;
 
-    public Comment(Customer customer,Product product,String content){
-        this.id = new CommentId(customer.getId(),product.getId());
+    public Comment(Customer customer, Product product, String content) {
+        this.id = new CommentId(customer.getId(), product.getId());
         this.customer = customer;
         this.product = product;
         this.details = content;
@@ -50,6 +50,7 @@ public class Comment {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
     @JsonBackReference
     public Product getProduct() {
         return product;

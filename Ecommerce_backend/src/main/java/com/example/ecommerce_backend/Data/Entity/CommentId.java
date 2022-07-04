@@ -9,7 +9,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-@Setter@Getter
+@Setter
+@Getter
 @Embeddable
 public class CommentId implements Serializable {
     @Column(name = "customer_id")
@@ -18,10 +19,11 @@ public class CommentId implements Serializable {
     private Long productId;
     @Column(name = "comment_date")
     private LocalDateTime timeStamp;
-    public CommentId(Long customerId,Long productId){
+
+    public CommentId(Long customerId, Long productId) {
         this.timeStamp = LocalDateTime.now();
-        this.customerId=customerId;
-        this.productId=productId;
+        this.customerId = customerId;
+        this.productId = productId;
     }
 
     public CommentId() {

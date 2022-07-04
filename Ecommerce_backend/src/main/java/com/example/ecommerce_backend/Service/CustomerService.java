@@ -1,15 +1,20 @@
 package com.example.ecommerce_backend.Service;
 
 import com.example.ecommerce_backend.Data.Entity.Customer;
-import com.example.ecommerce_backend.dto.request.CustomerRequestDto;
-import com.example.ecommerce_backend.dto.response.CustomerResponseDto;
+import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
+import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
 
 import java.util.List;
 
 public interface CustomerService {
-    List<Customer> getAllCustomer();
-    List<CustomerResponseDto> getAllCustomerDto();
-    Customer getCustomerById(Long id);
+
+    List<CustomerResponseDto> getAllCustomer();
+
+    CustomerResponseDto getCustomerByName(String name);
+
+    CustomerResponseDto getCustomerByNameAndPass(String name, String pass);
+
     void createCustomer(CustomerRequestDto customer);
-    void deleteCustomerById(Long id);
+
+    void deleteCustomerByName(String name);
 }

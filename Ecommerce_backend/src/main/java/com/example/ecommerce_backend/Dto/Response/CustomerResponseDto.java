@@ -1,4 +1,4 @@
-package com.example.ecommerce_backend.dto.response;
+package com.example.ecommerce_backend.Dto.Response;
 
 import com.example.ecommerce_backend.Data.Entity.Comment;
 import com.example.ecommerce_backend.Data.Entity.Rating;
@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
