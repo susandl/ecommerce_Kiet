@@ -64,12 +64,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void createProduct(ProductRequestDto productRequestDto) {
+        if (productRepository.existsByName(productRequestDto.getName())) {
+            throw new ProductNotFound("product " + productRequestDto.getName() + " exists");
+        }
         Product product = modelMapper.map(productRequestDto, Product.class);
         productRepository.save(product);
     }
 
     @Override
     public void deleteProductById(Long id) {
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFound("product id" + id + " does not exists");
+        }
         productRepository.deleteById(id);
     }
 

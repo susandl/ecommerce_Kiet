@@ -6,6 +6,7 @@ import com.example.ecommerce_backend.Dto.Request.CategoryRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CategoryResponseDto;
 import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
 import com.example.ecommerce_backend.Exception.CategoryNotFound;
+import com.example.ecommerce_backend.Exception.CustomerNotFound;
 import com.example.ecommerce_backend.Service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -32,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryResponseDto> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         if (categories.isEmpty()) {
-            throw new CategoryNotFound();
+            throw new CategoryNotFound("Category list not found");
         }
         Type listType = new TypeToken<List<CategoryResponseDto>>() {
         }.getType();
@@ -44,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto getCategoryById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty()) {
-            throw new CategoryNotFound(id);
+            throw new CategoryNotFound("Category " + id + " not found");
         }
         CategoryResponseDto categoryResponseDto = modelMapper.map(category, CategoryResponseDto.class);
         return categoryResponseDto;
@@ -52,12 +53,18 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void createCategory(CategoryRequestDto categoryRequestDto) {
+        if (categoryRepository.existsByName(categoryRequestDto.getName())) {
+            throw new CategoryNotFound("Category " + categoryRequestDto.getName() + " exist");
+        }
         Category category = modelMapper.map(categoryRequestDto, Category.class);
         categoryRepository.save(category);
     }
 
     @Override
     public void deleteCategoryById(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new CustomerNotFound("category " + id + " does not exists");
+        }
         categoryRepository.deleteById(id);
     }
 

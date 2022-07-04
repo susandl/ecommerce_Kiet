@@ -60,7 +60,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void createCustomer(CustomerRequestDto customerDto) {
-        if (check(customerDto.getName())) {
+        if (customerRepository.existsByName(customerDto.getName())) {
             throw new CustomerNotFound("customer " + customerDto.getName() + " exists");
         }
         Customer customer = modelMapper.map(customerDto, Customer.class);
@@ -69,18 +69,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomerByName(String name) {
-        if (check(name)) {
-            throw new CustomerNotFound("customer " + name + " exists");
+        if (!customerRepository.existsByName(name)) {
+            throw new CustomerNotFound("customer " + name + " does not exists");
         }
         customerRepository.deleteCustomerByName(name);
-    }
-
-    private boolean check(String name) {
-        List<Customer> customers = this.customerRepository.findAll();
-        for (Customer customer : customers) {
-            return customer.getName().equals(name);
-        }
-        return false;
     }
 
 }

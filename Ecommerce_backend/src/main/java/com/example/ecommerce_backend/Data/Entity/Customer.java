@@ -15,6 +15,7 @@ public class Customer {
     private String pass;
     private List<Comment> commentList;
     private List<Rating> ratingList;
+    private Role role;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,6 +64,16 @@ public class Customer {
 
     public void setRatingList(List<Rating> ratingList) {
         this.ratingList = ratingList;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public Customer() {
