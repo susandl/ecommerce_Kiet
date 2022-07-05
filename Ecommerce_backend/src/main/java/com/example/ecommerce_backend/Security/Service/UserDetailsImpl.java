@@ -28,9 +28,10 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl build(Customer customer) {
-        List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("ROLE_" + customer.getRole().getName()));
-        return new UserDetailsImpl(customer.getId(), customer.getName(), customer.getPass(), authorityList);
+        List<GrantedAuthority> authorities = customer.getRole().stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+        return new UserDetailsImpl(customer.getId(), customer.getName(), customer.getPass(), authorities);
     }
 
     @Override

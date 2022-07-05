@@ -1,5 +1,6 @@
 package com.example.ecommerce_backend.Controller.Admin;
 
+import com.example.ecommerce_backend.Dto.Request.SignupRequestDto;
 import com.example.ecommerce_backend.Service.CustomerService;
 import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
@@ -27,7 +28,7 @@ public class AdminController {
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createCustomer(@Valid @RequestBody CustomerRequestDto dto) {
+    public void createCustomer(@Valid @RequestBody SignupRequestDto dto) {
         this.customerService.createCustomer(dto);
     }
 

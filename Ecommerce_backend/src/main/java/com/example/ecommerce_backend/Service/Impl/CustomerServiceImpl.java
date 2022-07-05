@@ -2,6 +2,7 @@ package com.example.ecommerce_backend.Service.Impl;
 
 import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
+import com.example.ecommerce_backend.Dto.Request.SignupRequestDto;
 import com.example.ecommerce_backend.Exception.CustomerNotFound;
 import com.example.ecommerce_backend.Service.CustomerService;
 import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
@@ -59,11 +60,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void createCustomer(CustomerRequestDto customerDto) {
-        if (customerRepository.existsByName(customerDto.getName())) {
-            throw new CustomerNotFound("customer " + customerDto.getName() + " exists");
+    public void createCustomer(SignupRequestDto signupRequestDto) {
+        if (customerRepository.existsByName(signupRequestDto.getUsername())) {
+            throw new CustomerNotFound("customer " + signupRequestDto.getUsername() + " exists");
         }
-        Customer customer = modelMapper.map(customerDto, Customer.class);
+        Customer customer = modelMapper.map(signupRequestDto, Customer.class);
         customerRepository.save(customer);
     }
 

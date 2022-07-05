@@ -2,6 +2,7 @@ package com.example.ecommerce_backend.Service;
 
 import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
+import com.example.ecommerce_backend.Dto.Request.SignupRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public interface CustomerService {
 
     CustomerResponseDto getCustomerByNameAndPass(String name, String pass);
 
-    void createCustomer(CustomerRequestDto customer);
+    void createCustomer(SignupRequestDto customer);
 
     void deleteCustomerByName(String name);
 }

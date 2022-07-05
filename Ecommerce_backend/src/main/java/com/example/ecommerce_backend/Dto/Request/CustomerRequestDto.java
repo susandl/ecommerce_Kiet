@@ -16,4 +16,5 @@ public class CustomerRequestDto {
     private String name;
     @NotEmpty(message = "Customer password must be not empty")
     private String pass;
+
 }

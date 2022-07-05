@@ -5,7 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -15,7 +18,7 @@ public class Customer {
     private String pass;
     private List<Comment> commentList;
     private List<Rating> ratingList;
-    private Role role;
+    private Set<Role> role = new HashSet<>();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,13 +69,15 @@ public class Customer {
         this.ratingList = ratingList;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    public Role getRole() {
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "customer_role",
+            joinColumns = @JoinColumn(name = "customer_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    public Set<Role> getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Set<Role> role) {
         this.role = role;
     }
 
@@ -83,5 +88,6 @@ public class Customer {
         this.name = name;
         this.pass = pass;
     }
+
 
 }
