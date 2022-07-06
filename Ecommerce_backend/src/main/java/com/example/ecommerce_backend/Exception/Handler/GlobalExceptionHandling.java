@@ -26,17 +26,17 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {CustomerNotFound.class})
     protected ResponseEntity<Object> handlerCustomerNotFound(CustomerNotFound e) {
-        return new ResponseEntity<>(new ApiError(e.getMessage(), HttpStatus.NOT_FOUND, LocalDateTime.now()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {ProductNotFound.class})
     protected ResponseEntity<Object> handlerProductNotFound(ProductNotFound e) {
-        return new ResponseEntity<>(new ApiError(e.getMessage(), HttpStatus.NOT_FOUND, LocalDateTime.now()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(value = {CategoryNotFound.class})
     protected ResponseEntity<Object> handlerCategoryNotFound(CategoryNotFound e) {
-        return new ResponseEntity<>(new ApiError(e.getMessage(), HttpStatus.NOT_FOUND, LocalDateTime.now()), HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
     }
 
     @Override
@@ -50,7 +50,7 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleNoHandlerFoundException(NoHandlerFoundException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        return new ResponseEntity<>(new ApiError(e.getMessage(), status, LocalDateTime.now()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.BAD_REQUEST);
     }
 
 

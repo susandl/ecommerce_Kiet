@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,7 +32,7 @@ public class UserDetailsImpl implements UserDetails {
         List<GrantedAuthority> authorities = customer.getRole().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
-        return new UserDetailsImpl(customer.getId(), customer.getName(), customer.getPass(), authorities);
+        return new UserDetailsImpl(customer.getId(), customer.getName(), new BCryptPasswordEncoder().encode(customer.getPass()), authorities);
     }
 
     @Override

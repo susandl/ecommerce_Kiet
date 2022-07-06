@@ -17,4 +17,11 @@ public class CustomerRequestDto {
     @NotEmpty(message = "Customer password must be not empty")
     private String pass;
 
+    @Override
+    public String toString() {
+        return "CustomerRequestDto{" +
+                "name='" + name + '\'' +
+                ", pass='" + pass + '\'' +
+                '}';
+    }
 }

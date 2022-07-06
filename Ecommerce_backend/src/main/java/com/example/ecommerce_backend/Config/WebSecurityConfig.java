@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -29,23 +30,26 @@ import org.springframework.security.web.authentication.AuthenticationFilter;
         prePostEnabled = true)
 
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
+    private UserDetailsServiceImpl userDetailsService;
     private AuthenticationEntryHandler unauthorizedHandler;
-
-    @Autowired
     private JwtUtil jwtUtil;
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    @Autowired
+    WebSecurityConfig(UserDetailsServiceImpl userDetailsService,
+                      AuthenticationEntryHandler unauthorizedHandler, JwtUtil jwtUtil) {
+        this.userDetailsService = userDetailsService;
+        this.unauthorizedHandler = unauthorizedHandler;
+        this.jwtUtil = jwtUtil;
     }
 
     @Bean
     public JwtAuthFilter authenticationJwtTokenFilter() {
         return new JwtAuthFilter(jwtUtil, userDetailsService);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Override
@@ -62,11 +66,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeHttpRequests()
-                .antMatchers("/admin").hasAnyRole("admin")
-                .antMatchers("/customer").hasAnyRole("customer")
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                .antMatchers("/customer/**").hasAnyRole("CUSTOMER")
                 .anyRequest().authenticated();
-
+        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

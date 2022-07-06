@@ -52,16 +52,8 @@ public class JwtUtil {
         return false;
     }
 
-    public Claims getClaimsFromJwtToken(String token) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody();
-    }
-
     public String getUserNameFromJwtToken(String jwt) {
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(jwt).getBody().getSubject();
-    }
-
-    private boolean isTokenExpired(Claims claims) {
-        return claims.getExpiration().after(new Date());
     }
 
 }
