@@ -56,9 +56,10 @@ public class AuthServiceImpl implements AuthService {
         }
         Customer customer = modelMapper.map(customerRequestDto, Customer.class);
         Set<Role> roles = new HashSet<>();
-        Optional<Role> role = roleRepository.findById(1L);
-        roles.add(role.get());
+        Role role = roleRepository.findByName("CUSTOMER");
+        roles.add(role);
         customer.setRole(roles);
+        System.out.println(customer.toString());
         customerRepository.save(customer);
     }
 

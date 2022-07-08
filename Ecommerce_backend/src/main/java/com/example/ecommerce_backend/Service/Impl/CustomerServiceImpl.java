@@ -24,6 +24,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     public CustomerServiceImpl(CustomerRepository customerRepository, ModelMapper modelMapper) {
+        super();
         this.modelMapper = modelMapper;
         this.customerRepository = customerRepository;
     }

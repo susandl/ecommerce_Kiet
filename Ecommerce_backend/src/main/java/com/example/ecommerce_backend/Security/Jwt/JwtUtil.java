@@ -18,7 +18,7 @@ public class JwtUtil {
     private final int jwtExpirationMs;
     private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
-    public JwtUtil(@Value("${Jwt.key}") final String jwtSecret, @Value("${Jwt.expireTime}") final int jwtExpirationMs) {
+    public JwtUtil(@Value("secret") final String jwtSecret, @Value("3600000") final int jwtExpirationMs) {
         this.jwtSecret = jwtSecret;
         this.jwtExpirationMs = jwtExpirationMs;
     }
@@ -53,7 +53,7 @@ public class JwtUtil {
     }
 
     public String getUserNameFromJwtToken(String jwt) {
-        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJwt(jwt).getBody().getSubject();
+        return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(jwt).getBody().getSubject();
     }
 
 }

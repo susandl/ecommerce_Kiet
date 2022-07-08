@@ -69,10 +69,10 @@ public class Customer {
         this.ratingList = ratingList;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE})
     @JoinTable(name = "customer_role",
-            joinColumns = @JoinColumn(name = "customer_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
+            joinColumns = @JoinColumn(name = "customer_id",referencedColumnName = "customer_id",nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id",nullable = false))
     public Set<Role> getRole() {
         return role;
     }
