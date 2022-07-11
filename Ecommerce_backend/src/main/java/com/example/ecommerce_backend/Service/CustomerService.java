@@ -13,9 +13,9 @@ public interface CustomerService {
 
     CustomerResponseDto getCustomerByName(String name);
 
-    CustomerResponseDto getCustomerByNameAndPass(String name, String pass);
+    String createCustomer(SignupRequestDto customer);
 
-    void createCustomer(SignupRequestDto customer);
+    String deleteCustomerByName(String name);
 
-    void deleteCustomerByName(String name);
+    String modifyCustomer(Long id, CustomerRequestDto customerRequestDto);
 }

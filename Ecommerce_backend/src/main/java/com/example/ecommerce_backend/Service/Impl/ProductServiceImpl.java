@@ -1,10 +1,7 @@
 package com.example.ecommerce_backend.Service.Impl;
 
-import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Entity.Product;
 import com.example.ecommerce_backend.Data.Repo.ProductRepository;
-import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
-import com.example.ecommerce_backend.Exception.CustomerNotFound;
 import com.example.ecommerce_backend.Exception.ProductNotFound;
 import com.example.ecommerce_backend.Service.ProductService;
 import com.example.ecommerce_backend.Dto.Request.ProductRequestDto;

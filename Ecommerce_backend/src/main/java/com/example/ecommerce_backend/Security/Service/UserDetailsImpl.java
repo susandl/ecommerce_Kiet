@@ -30,7 +30,7 @@ public class UserDetailsImpl implements UserDetails {
 
     public static UserDetailsImpl build(Customer customer) {
         List<GrantedAuthority> authorities = customer.getRole().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_"+role.getName()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
                 .collect(Collectors.toList());
         return new UserDetailsImpl(customer.getId(), customer.getName(), new BCryptPasswordEncoder().encode(customer.getPass()), authorities);
     }

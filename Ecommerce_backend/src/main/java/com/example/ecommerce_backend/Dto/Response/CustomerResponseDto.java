@@ -17,6 +17,5 @@ import java.util.List;
 public class CustomerResponseDto {
     @JsonProperty("logging name: ")
     private String name;
-    private List<Comment> commentList;
-    private List<Rating> ratingList;
+
 }

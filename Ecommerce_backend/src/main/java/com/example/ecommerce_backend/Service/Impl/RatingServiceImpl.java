@@ -8,7 +8,7 @@ import com.example.ecommerce_backend.Data.Repo.ProductRepository;
 import com.example.ecommerce_backend.Data.Repo.RatingRepository;
 import com.example.ecommerce_backend.Dto.Request.RatingRequestDto;
 import com.example.ecommerce_backend.Dto.Response.RatingResponseDto;
-import com.example.ecommerce_backend.Exception.CustomerNotFound;
+import com.example.ecommerce_backend.Exception.CustomerException;
 import com.example.ecommerce_backend.Exception.ProductNotFound;
 import com.example.ecommerce_backend.Exception.RatingNotFound;
 import com.example.ecommerce_backend.Service.RatingService;
@@ -68,7 +68,7 @@ public class RatingServiceImpl implements RatingService {
             throw new ProductNotFound(ratingRequestDto.getProductId());
         }
         if (customer.isEmpty()) {
-            throw new CustomerNotFound(ratingRequestDto.getCustomerId());
+            throw new CustomerException(ratingRequestDto.getCustomerId());
         }
         Rating rating = new Rating(customer.get(), product.get(), ratingRequestDto.getPoint());
         this.ratingRepository.save(rating);

@@ -22,16 +22,16 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    @ApiResponses(value = {@ApiResponse(responseCode = "200",description = "Login success"),
-                            @ApiResponse(responseCode = "401",description = "Login failed")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Login success"),
+            @ApiResponse(responseCode = "401", description = "Login failed")})
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
         return ResponseEntity.ok(authService.signinUser(customerRequestDto));
     }
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
-    @ApiResponses(value = {@ApiResponse(responseCode = "201",description = "Register success"),
-                            @ApiResponse(responseCode = "400",description = "Invalid value")})
+    @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "Register success"),
+            @ApiResponse(responseCode = "400", description = "Invalid value")})
     public void registerUser(@Valid @RequestBody CustomerRequestDto customerRequestDto) {
         authService.registerUser(customerRequestDto);
     }

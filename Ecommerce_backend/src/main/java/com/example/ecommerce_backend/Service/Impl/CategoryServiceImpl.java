@@ -4,9 +4,8 @@ import com.example.ecommerce_backend.Data.Entity.Category;
 import com.example.ecommerce_backend.Data.Repo.CategoryRepository;
 import com.example.ecommerce_backend.Dto.Request.CategoryRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CategoryResponseDto;
-import com.example.ecommerce_backend.Dto.Response.CustomerResponseDto;
 import com.example.ecommerce_backend.Exception.CategoryNotFound;
-import com.example.ecommerce_backend.Exception.CustomerNotFound;
+import com.example.ecommerce_backend.Exception.CustomerException;
 import com.example.ecommerce_backend.Service.CategoryService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -63,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategoryById(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new CustomerNotFound("category " + id + " does not exists");
+            throw new CustomerException("category " + id + " does not exists");
         }
         categoryRepository.deleteById(id);
     }

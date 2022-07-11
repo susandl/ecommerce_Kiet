@@ -3,22 +3,18 @@ package com.example.ecommerce_backend.Service.Impl;
 import com.example.ecommerce_backend.Data.Entity.Comment;
 import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Entity.Product;
-import com.example.ecommerce_backend.Data.Entity.Rating;
 import com.example.ecommerce_backend.Data.Repo.CommentRepository;
 import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
 import com.example.ecommerce_backend.Data.Repo.ProductRepository;
 import com.example.ecommerce_backend.Dto.Request.CommentRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CommentResponseDto;
-import com.example.ecommerce_backend.Dto.Response.RatingResponseDto;
 import com.example.ecommerce_backend.Exception.CommentNotFound;
-import com.example.ecommerce_backend.Exception.CustomerNotFound;
+import com.example.ecommerce_backend.Exception.CustomerException;
 import com.example.ecommerce_backend.Exception.ProductNotFound;
-import com.example.ecommerce_backend.Exception.RatingNotFound;
 import com.example.ecommerce_backend.Service.CommentService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -72,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
             throw new ProductNotFound(commentRequestDto.getProductId());
         }
         if (customer.isEmpty()) {
-            throw new CustomerNotFound(commentRequestDto.getCustomerId());
+            throw new CustomerException(commentRequestDto.getCustomerId());
         }
         Comment comment = new Comment(customer.get(), product.get(), commentRequestDto.getDetails());
         this.commentRepository.save(comment);

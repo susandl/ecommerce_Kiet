@@ -5,10 +5,8 @@ import com.example.ecommerce_backend.Data.Entity.Role;
 import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
 import com.example.ecommerce_backend.Data.Repo.RoleRepository;
 import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
-import com.example.ecommerce_backend.Dto.Request.SignupRequestDto;
 import com.example.ecommerce_backend.Dto.Response.JwtResponse;
-import com.example.ecommerce_backend.Exception.CustomerNotFound;
-import com.example.ecommerce_backend.Exception.ResourceNotFound;
+import com.example.ecommerce_backend.Exception.CustomerException;
 import com.example.ecommerce_backend.Security.Jwt.JwtUtil;
 import com.example.ecommerce_backend.Security.Service.UserDetailsImpl;
 import com.example.ecommerce_backend.Service.AuthService;
@@ -18,13 +16,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -52,7 +48,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void registerUser(CustomerRequestDto customerRequestDto) {
         if (customerRepository.existsByName(customerRequestDto.getName())) {
-            throw new CustomerNotFound("User name already exists");
+            throw new CustomerException("User name already exists");
         }
         Customer customer = modelMapper.map(customerRequestDto, Customer.class);
         Set<Role> roles = new HashSet<>();
@@ -66,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponse signinUser(CustomerRequestDto customerRequestDto) {
         if (!customerRepository.existsByName(customerRequestDto.getName())) {
-            throw new CustomerNotFound("Customer " + customerRequestDto.getName() + " not found");
+            throw new CustomerException("Customer " + customerRequestDto.getName() + " not found");
         }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(customerRequestDto.getName(), customerRequestDto.getPass()));

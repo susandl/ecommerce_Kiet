@@ -18,8 +18,8 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/{name}/{pass}")
-    public CustomerResponseDto getCustomerByName(@PathVariable String name, @PathVariable String pass) {
+    @GetMapping("/{name}")
+    public CustomerResponseDto getCustomerByName(@PathVariable String name) {
         return customerService.getCustomerByName(name);
     }
 }

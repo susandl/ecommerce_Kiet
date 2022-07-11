@@ -1,14 +1,12 @@
 package com.example.ecommerce_backend.Exception.Handler;
 
 import com.example.ecommerce_backend.Exception.CategoryNotFound;
-import com.example.ecommerce_backend.Exception.CustomerNotFound;
+import com.example.ecommerce_backend.Exception.CustomerException;
 import com.example.ecommerce_backend.Exception.ProductNotFound;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,13 +17,12 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Logger;
 
 @ControllerAdvice
 public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {CustomerNotFound.class})
-    protected ResponseEntity<Object> handlerCustomerNotFound(CustomerNotFound e) {
+    @ExceptionHandler(value = {CustomerException.class})
+    protected ResponseEntity<Object> handlerCustomerNotFound(CustomerException e) {
         return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
     }
 

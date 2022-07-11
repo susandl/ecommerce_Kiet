@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@OpenAPIDefinition(info = @Info(title = "Ecommerce API",description = "Ecommerce micro service"))
+@OpenAPIDefinition(info = @Info(title = "Ecommerce API", description = "Ecommerce micro service"))
 public class EcommerceBackendApplication {
 
     public static void main(String[] args) {
