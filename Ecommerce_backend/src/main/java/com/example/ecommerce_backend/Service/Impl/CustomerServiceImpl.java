@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -60,22 +61,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public String createCustomer(SignupRequestDto signupRequestDto) {
+    public void createCustomer(SignupRequestDto signupRequestDto) {
         if (customerRepository.existsByName(signupRequestDto.getUsername())) {
             throw new CustomerException("Customer " + signupRequestDto.getUsername() + " exists");
         }
-        if (!roleRepository.existsByName(signupRequestDto.getRole())) {
+        String roleName = signupRequestDto.getRole().toString();
+        if (!roleRepository.existsByName(roleName)) {
             throw new ResourceNotFound("Role name not found");
         }
-        Customer customer = new Customer();
-        customer.setName(signupRequestDto.getUsername());
-        customer.setPass(signupRequestDto.getPassword());
-        Role role = roleRepository.findByName(signupRequestDto.getRole());
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        customer.setRole(roles);
+        Customer customer = modelMapper.map(signupRequestDto,Customer.class);
         customerRepository.save(customer);
-        return "Created";
     }
 
     @Override
@@ -88,16 +83,14 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public String modifyCustomer(Long id, CustomerRequestDto customerRequestDto) {
-        Optional<Customer> customer = customerRepository.findById(id);
-        if (customer.isEmpty()) {
+    public void modifyCustomer(Long id, CustomerRequestDto customerRequestDto) {
+        Optional<Customer> customerOptional = customerRepository.findById(id);
+        if (customerOptional.isEmpty()) {
             throw new CustomerException("Customer not found");
         }
-        Customer customer1 = customer.get();
-        customer1.setName(customerRequestDto.getName());
-        customer1.setPass(customerRequestDto.getPass());
-        customerRepository.save(customer1);
-        return "Modified";
+        Customer customer = customerOptional.get();
+        modelMapper.map(customerRequestDto,customer);
+        customerRepository.save(customer);
     }
 
 }

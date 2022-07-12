@@ -1,7 +1,6 @@
 package com.example.ecommerce_backend.Service;
 
 import com.example.ecommerce_backend.Data.Entity.Customer;
-import com.example.ecommerce_backend.Data.Entity.Role;
 import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
 import com.example.ecommerce_backend.Data.Repo.RoleRepository;
 import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
@@ -30,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class CustomerServiceTest {
+public class CustomerServiceImplTest {
     @Mock
     CustomerRepository customerRepository;
     @Mock
@@ -39,14 +38,17 @@ public class CustomerServiceTest {
     RoleRepository roleRepository;
     @InjectMocks
     CustomerServiceImpl customerService;
-
+    CustomerResponseDto customerResponseDto;
+    Customer customer;
+    CustomerRequestDto customerRequestDto;
     @BeforeEach
     void beforeEach(){
+        customerResponseDto = mock(CustomerResponseDto.class);
+        customer = mock(Customer.class);
+        customerRequestDto = mock(CustomerRequestDto.class);
     }
     @Test
     void getCustomer_ShouldReturnCustomerResponseDto_WhenNameIsCorrect(){
-        CustomerResponseDto customerResponseDto = new CustomerResponseDto();
-        Customer customer = new Customer();
         when(customerRepository.findByName("Kiet")).thenReturn(customer);
         when(modelMapper.map(customer,CustomerResponseDto.class)).thenReturn(customerResponseDto);
         CustomerResponseDto result = customerService.getCustomerByName("Kiet");
@@ -64,22 +66,21 @@ public class CustomerServiceTest {
 
     @Test
     void getAllCustomer_ShouldReturnCustomerResponseList_WhenCustomerExist(){
-        CustomerResponseDto customer = new CustomerResponseDto();
-        Customer customer1 = new Customer();
-        List<CustomerResponseDto> customers = new ArrayList<>();
-        List<Customer> customerList = new ArrayList<>();
-        customers.add(customer);
-        customerList.add(customer1);
+        List<CustomerResponseDto> customerDtoList = mock(ArrayList.class);
+        List<Customer> customerList = mock(ArrayList.class);
+        customerDtoList.add(customerResponseDto);
+        customerList.add(customer);
         Type listType = new TypeToken<List<CustomerResponseDto>>() {
         }.getType();
         when(customerRepository.findAll()).thenReturn(customerList);
-        when(modelMapper.map(customerList,listType)).thenReturn(customers);
+        when(modelMapper.map(customerList,listType)).thenReturn(customerDtoList);
         List<CustomerResponseDto> result = customerService.getAllCustomer();
-        assertThat(result,is(customers));
+        assertThat(result,is(customerDtoList));
     }
 
     @Test
     void getAllCustomer_ShouldReturnCustomerNotFound_WhenCustomerDoesNotExist(){
+        when(customerRepository.findAll()).thenReturn(null);
         CustomerException e = Assertions.assertThrows(CustomerException.class,
                 () -> customerService.getAllCustomer());
         assertThat(e.getMessage(),is("Customer List not found"));
@@ -87,8 +88,7 @@ public class CustomerServiceTest {
 
     @Test
     void createCustomer_ReturnCustomerException_WhenCustomerNameExists(){
-        SignupRequestDto signupRequestDto = new SignupRequestDto();
-        signupRequestDto.setUsername("Wibu");
+        SignupRequestDto signupRequestDto = mock(SignupRequestDto.class);
         when(customerRepository.existsByName("Wibu")).thenReturn(true);
         CustomerException e = Assertions.assertThrows(CustomerException.class,
                 () -> customerService.createCustomer(signupRequestDto));
@@ -98,7 +98,6 @@ public class CustomerServiceTest {
     @Test
     void createCustomer_ReturnRoleNotFoundException_WhenRoleDoesNotExist(){
         SignupRequestDto signupRequestDto = new SignupRequestDto();
-        signupRequestDto.setRole("Wibu");
         when(roleRepository.existsByName("Wibu")).thenReturn(false);
         ResourceNotFound e = Assertions.assertThrows(ResourceNotFound.class,
                 () -> customerService.createCustomer(signupRequestDto));
@@ -106,14 +105,14 @@ public class CustomerServiceTest {
     }
 
     @Test
-    void createCustomer_ReturnSuccess_WhenNameDoesNotExistAndRoleExist(){
+    void createCustomer_ShouldSuccess_WhenNameDoesNotExistAndRoleExist(){
         SignupRequestDto signupRequestDto = new SignupRequestDto();
-        signupRequestDto.setUsername("Wibu");
-        signupRequestDto.setRole("Wibu");
         when(customerRepository.existsByName("Wibu")).thenReturn(false);
         when(roleRepository.existsByName("Wibu")).thenReturn(true);
-        String result = customerService.createCustomer(signupRequestDto);
-        assertThat(result,is("Created"));
+        when(modelMapper.map(signupRequestDto,Customer.class)).thenReturn(customer);
+        customerService.createCustomer(signupRequestDto);
+        verify(customerRepository).save(customer);
+
     }
 
     @Test
@@ -132,16 +131,15 @@ public class CustomerServiceTest {
 
     @Test
     void modifyCustomer_ReturnSuccess_WhenCustomerIdExist(){
-        Optional<Customer> customer = Optional.of(new Customer());
-        CustomerRequestDto customerRequestDto = new CustomerRequestDto();
-        when(customerRepository.findById(1L)).thenReturn(customer);
-        String result = customerService.modifyCustomer(1L,customerRequestDto);
-        assertThat(result,is("Modified"));
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(customer));
+        customerService.modifyCustomer(1L,customerRequestDto);
+        verify(modelMapper).map(customerRequestDto,customer);
+        verify(customerRepository).save(customer);
     }
 
     @Test
     void modifyCustomer_ReturnException_WhenCustomerIdDoesNotExist(){
-        CustomerRequestDto customerRequestDto = new CustomerRequestDto();
+        when(customerRepository.findById(1L)).thenReturn(null);
         CustomerException e = Assertions.assertThrows(CustomerException.class,
                 () -> customerService.modifyCustomer(1L,customerRequestDto));
         assertThat(e.getMessage(), is("Customer not found"));

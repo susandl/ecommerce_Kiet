@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerResponseDto {
-    @JsonProperty("logging name: ")
     private String name;
 
 }
