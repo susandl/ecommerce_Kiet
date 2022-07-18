@@ -11,9 +11,11 @@ public interface ProductService {
 
     List<ProductResponseDto> getProductsByCategoryName(String name);
 
-    ProductResponseDto getProductByName(String name);
+    ProductResponseDto getProductById(Long id);
 
     void createProduct(ProductRequestDto productRequestDto);
 
     void deleteProductById(Long id);
+
+    void modifyProduct(Long id, ProductRequestDto dto);
 }

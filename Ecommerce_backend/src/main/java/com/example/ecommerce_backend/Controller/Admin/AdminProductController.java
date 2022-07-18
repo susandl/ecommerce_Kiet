@@ -11,6 +11,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/admin/product")
 public class AdminProductController {
     private final ProductService productService;
@@ -25,15 +26,20 @@ public class AdminProductController {
         return productService.getAllProducts();
     }
 
-    @GetMapping("/{name}")
-    public ProductResponseDto getProductByName(@PathVariable("name") String name) {
-        return this.productService.getProductByName(name);
+    @GetMapping("/{id}")
+    public ProductResponseDto getProductById(@PathVariable("id") Long id) {
+        return this.productService.getProductById(id);
     }
 
     @PostMapping("/create")
     @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(@Valid @RequestBody ProductRequestDto dto) {
         this.productService.createProduct(dto);
+    }
+
+    @PutMapping("/update/{id}")
+    public void modifyProduct(@Valid @RequestBody ProductRequestDto dto,@PathVariable("id") Long id){
+        this.productService.modifyProduct(id,dto);
     }
 
     @DeleteMapping("/delete/{id}")

@@ -9,7 +9,7 @@ import com.example.ecommerce_backend.Data.Repo.RatingRepository;
 import com.example.ecommerce_backend.Dto.Request.RatingRequestDto;
 import com.example.ecommerce_backend.Dto.Response.RatingResponseDto;
 import com.example.ecommerce_backend.Exception.CustomerException;
-import com.example.ecommerce_backend.Exception.ProductNotFound;
+import com.example.ecommerce_backend.Exception.ProductException;
 import com.example.ecommerce_backend.Exception.RatingNotFound;
 import com.example.ecommerce_backend.Service.RatingService;
 import org.modelmapper.ModelMapper;
@@ -65,7 +65,7 @@ public class RatingServiceImpl implements RatingService {
         Optional<Product> product = this.productRepository.findById(ratingRequestDto.getProductId());
         Optional<Customer> customer = this.customerRepository.findById(ratingRequestDto.getCustomerId());
         if (product.isEmpty()) {
-            throw new ProductNotFound(ratingRequestDto.getProductId());
+            throw new ProductException(ratingRequestDto.getProductId());
         }
         if (customer.isEmpty()) {
             throw new CustomerException(ratingRequestDto.getCustomerId());

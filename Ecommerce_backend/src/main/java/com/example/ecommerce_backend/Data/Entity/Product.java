@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -15,6 +16,10 @@ public class Product {
     private Long id;
     private String name;
     private String details;
+    private Long price;
+    private String imageUrl;
+    private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
     private Category category;
     private List<Comment> commentList;
     private List<Rating> ratingList;
@@ -50,6 +55,39 @@ public class Product {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+    @Column(name = "product_price")
+    public Long getPrice() {
+        return price;
+    }
+
+    @Column(name = "product_image_url")
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
+    }
+    @Column(name = "product_created_date")
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+    @Column(name = "product_updated_date")
+    public LocalDateTime getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(LocalDateTime updatedDate) {
+        this.updatedDate = updatedDate;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

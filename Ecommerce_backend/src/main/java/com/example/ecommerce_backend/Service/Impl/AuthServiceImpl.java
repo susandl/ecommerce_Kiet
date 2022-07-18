@@ -67,11 +67,13 @@ public class AuthServiceImpl implements AuthService {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(customerRequestDto.getName(), customerRequestDto.getPass()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtil.generateJwtToken(authentication);
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        String jwt = jwtUtil.generateJwtToken(userDetails);
+        System.out.println(" size of authoriry \n\n"+userDetails.getAuthorities().size());
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
+        System.out.println(roles.size());
         return new JwtResponse(jwt, userDetails.getUsername(), roles);
     }
 }

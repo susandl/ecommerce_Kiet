@@ -1,8 +1,13 @@
 package com.example.ecommerce_backend.Service.Impl;
 
+import com.example.ecommerce_backend.Data.Entity.Category;
+import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Entity.Product;
+import com.example.ecommerce_backend.Data.Repo.CategoryRepository;
 import com.example.ecommerce_backend.Data.Repo.ProductRepository;
-import com.example.ecommerce_backend.Exception.ProductNotFound;
+import com.example.ecommerce_backend.Exception.CategoryException;
+import com.example.ecommerce_backend.Exception.CustomerException;
+import com.example.ecommerce_backend.Exception.ProductException;
 import com.example.ecommerce_backend.Service.ProductService;
 import com.example.ecommerce_backend.Dto.Request.ProductRequestDto;
 import com.example.ecommerce_backend.Dto.Response.ProductResponseDto;
@@ -12,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,18 +25,21 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ModelMapper modelMapper) {
+    public ProductServiceImpl(ProductRepository productRepository, ModelMapper modelMapper,
+                              CategoryRepository categoryRepository) {
         this.productRepository = productRepository;
         this.modelMapper = modelMapper;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public List<ProductResponseDto> getProductsByCategoryName(String name) {
         List<Product> products = productRepository.findAllProductByCategoryName(name);
         if (products.isEmpty()) {
-            throw new ProductNotFound("Product List not found");
+            throw new ProductException("Product List not found");
         }
         Type listType = new TypeToken<List<ProductResponseDto>>() {
         }.getType();
@@ -39,10 +48,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductResponseDto getProductByName(String name) {
-        Optional<Product> product = Optional.ofNullable(productRepository.getProductByName(name));
+    public ProductResponseDto getProductById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
         if (product.isEmpty()) {
-            throw new ProductNotFound(name);
+            throw new ProductException("Product id"+id +" not found");
         }
         ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
         return productResponseDto;
@@ -52,7 +61,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductResponseDto> getAllProducts() {
         List<Product> products = productRepository.findAll();
         if (products.isEmpty())
-            throw new ProductNotFound("Product List not found");
+            throw new ProductException("Product List not found");
         Type listType = new TypeToken<List<ProductResponseDto>>() {
         }.getType();
         List<ProductResponseDto> productResponseDtos = modelMapper.map(products, listType);
@@ -62,18 +71,41 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void createProduct(ProductRequestDto productRequestDto) {
         if (productRepository.existsByName(productRequestDto.getName())) {
-            throw new ProductNotFound("product " + productRequestDto.getName() + " exists");
+            throw new ProductException("Product " + productRequestDto.getName() + " exists");
         }
-        Product product = modelMapper.map(productRequestDto, Product.class);
+        if (!categoryRepository.existsByName(productRequestDto.getCategoryName())) {
+            throw new CategoryException("Category " + productRequestDto.getCategoryName() + " not found");
+        }
+        Product product = new Product();
+        modelMapper.map(productRequestDto,product);
+        Category category = categoryRepository.findByName(productRequestDto.getCategoryName());
+        product.setCategory(category);
+        product.setCreatedDate(LocalDateTime.now());
+        product.setUpdatedDate(product.getCreatedDate());
         productRepository.save(product);
+
     }
 
     @Override
     public void deleteProductById(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ProductNotFound("product id" + id + " does not exists");
+            throw new ProductException("product id" + id + " does not exists");
         }
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void modifyProduct(Long id, ProductRequestDto dto) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isEmpty()) {
+            throw new ProductException("Product not found");
+        }
+        Product result = product.get();
+        modelMapper.map(dto,result);
+        Category category = categoryRepository.findByName(dto.getCategoryName());
+        result.setCategory(category);
+        result.setUpdatedDate(LocalDateTime.now());
+        productRepository.save(result);
     }
 
 

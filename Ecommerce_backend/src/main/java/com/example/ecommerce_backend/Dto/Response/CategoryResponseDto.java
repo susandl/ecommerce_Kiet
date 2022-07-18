@@ -11,8 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryResponseDto {
-    @JsonProperty("Category name")
+    private Long id;
     private String name;
-    @JsonProperty("Category details")
     private String details;
 }

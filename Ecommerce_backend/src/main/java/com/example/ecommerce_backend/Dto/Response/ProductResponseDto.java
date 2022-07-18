@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ProductResponseDto {
-    @JsonProperty("Product name")
+    private Long id;
     private String name;
-    @JsonProperty("Product details")
     private String details;
-
+    private Long price;
+    private String imageUrl;
 }

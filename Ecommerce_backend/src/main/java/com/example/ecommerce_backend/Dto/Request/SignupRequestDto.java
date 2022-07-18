@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -20,5 +21,5 @@ public class SignupRequestDto {
     @NotEmpty(message = "password must not be empty")
     private String password;
     @NotEmpty(message = "role must not be empty")
-    private Set<Role> role = new HashSet<>();
+    private String role;
 }

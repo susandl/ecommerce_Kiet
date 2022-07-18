@@ -1,8 +1,8 @@
 package com.example.ecommerce_backend.Exception.Handler;
 
-import com.example.ecommerce_backend.Exception.CategoryNotFound;
+import com.example.ecommerce_backend.Exception.CategoryException;
 import com.example.ecommerce_backend.Exception.CustomerException;
-import com.example.ecommerce_backend.Exception.ProductNotFound;
+import com.example.ecommerce_backend.Exception.ProductException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +26,13 @@ public class GlobalExceptionHandling extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {ProductNotFound.class})
-    protected ResponseEntity<Object> handlerProductNotFound(ProductNotFound e) {
+    @ExceptionHandler(value = {ProductException.class})
+    protected ResponseEntity<Object> handlerProductNotFound(ProductException e) {
         return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {CategoryNotFound.class})
-    protected ResponseEntity<Object> handlerCategoryNotFound(CategoryNotFound e) {
+    @ExceptionHandler(value = {CategoryException.class})
+    protected ResponseEntity<Object> handlerCategoryNotFound(CategoryException e) {
         return new ResponseEntity<>(new ApiError(e.getMessage(), LocalDateTime.now()), HttpStatus.NOT_FOUND);
     }
 

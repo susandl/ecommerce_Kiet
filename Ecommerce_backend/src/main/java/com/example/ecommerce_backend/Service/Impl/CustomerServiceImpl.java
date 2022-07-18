@@ -65,21 +65,26 @@ public class CustomerServiceImpl implements CustomerService {
         if (customerRepository.existsByName(signupRequestDto.getUsername())) {
             throw new CustomerException("Customer " + signupRequestDto.getUsername() + " exists");
         }
-        String roleName = signupRequestDto.getRole().toString();
-        if (!roleRepository.existsByName(roleName)) {
+
+        if (!roleRepository.existsByName(signupRequestDto.getRole())) {
             throw new ResourceNotFound("Role name not found");
         }
-        Customer customer = modelMapper.map(signupRequestDto,Customer.class);
+        Customer customer = new Customer();
+        Role role = roleRepository.findByName(signupRequestDto.getRole());
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        customer.setName(signupRequestDto.getUsername());
+        customer.setPass(signupRequestDto.getPassword());
+        customer.setRole(roles);
         customerRepository.save(customer);
     }
 
     @Override
-    public String deleteCustomerByName(String name) {
-        if (!customerRepository.existsByName(name)) {
-            throw new CustomerException("Customer " + name + " does not exist");
+    public void deleteCustomerById(Long id) {
+        if (!customerRepository.existsById(id)) {
+            throw new CustomerException("Customer id " + id + " does not exist");
         }
-        customerRepository.deleteCustomerByName(name);
-        return "Deleted";
+        customerRepository.deleteById(id);
     }
 
     @Override

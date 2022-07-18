@@ -1,10 +1,11 @@
 package com.example.ecommerce_backend.Service.Impl;
 
 import com.example.ecommerce_backend.Data.Entity.Category;
+import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Repo.CategoryRepository;
 import com.example.ecommerce_backend.Dto.Request.CategoryRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CategoryResponseDto;
-import com.example.ecommerce_backend.Exception.CategoryNotFound;
+import com.example.ecommerce_backend.Exception.CategoryException;
 import com.example.ecommerce_backend.Exception.CustomerException;
 import com.example.ecommerce_backend.Service.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -32,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryResponseDto> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
         if (categories.isEmpty()) {
-            throw new CategoryNotFound("Category list not found");
+            throw new CategoryException("Category list not found");
         }
         Type listType = new TypeToken<List<CategoryResponseDto>>() {
         }.getType();
@@ -44,7 +45,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryResponseDto getCategoryById(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty()) {
-            throw new CategoryNotFound("Category " + id + " not found");
+            throw new CategoryException("Category " + id + " not found");
         }
         CategoryResponseDto categoryResponseDto = modelMapper.map(category, CategoryResponseDto.class);
         return categoryResponseDto;
@@ -53,7 +54,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void createCategory(CategoryRequestDto categoryRequestDto) {
         if (categoryRepository.existsByName(categoryRequestDto.getName())) {
-            throw new CategoryNotFound("Category " + categoryRequestDto.getName() + " exist");
+            throw new CategoryException("Category " + categoryRequestDto.getName() + " exist");
         }
         Category category = modelMapper.map(categoryRequestDto, Category.class);
         categoryRepository.save(category);
@@ -65,6 +66,17 @@ public class CategoryServiceImpl implements CategoryService {
             throw new CustomerException("category " + id + " does not exists");
         }
         categoryRepository.deleteById(id);
+    }
+
+    @Override
+    public void modifyCustomer(Long id, CategoryRequestDto categoryRequestDto) {
+        Optional<Category> category = categoryRepository.findById(id);
+        if (category.isEmpty()) {
+            throw new CategoryException("Customer not found");
+        }
+        Category result = category.get();
+        modelMapper.map(categoryRequestDto,result);
+        categoryRepository.save(result);
     }
 
 }

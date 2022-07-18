@@ -69,7 +69,7 @@ public class Customer {
         this.ratingList = ratingList;
     }
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "customer_role",
             joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false))

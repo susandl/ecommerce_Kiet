@@ -1,6 +1,7 @@
 package com.example.ecommerce_backend.Service;
 
 import com.example.ecommerce_backend.Data.Entity.Customer;
+import com.example.ecommerce_backend.Data.Entity.Role;
 import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
 import com.example.ecommerce_backend.Data.Repo.RoleRepository;
 import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -27,6 +29,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @ExtendWith(MockitoExtension.class)
 public class CustomerServiceImplTest {
@@ -107,26 +110,34 @@ public class CustomerServiceImplTest {
     @Test
     void createCustomer_ShouldSuccess_WhenNameDoesNotExistAndRoleExist(){
         SignupRequestDto signupRequestDto = new SignupRequestDto();
+        signupRequestDto.setUsername("Wibu");
+        signupRequestDto.setPassword("Wibu");
+        signupRequestDto.setRole("Wibu");
         when(customerRepository.existsByName("Wibu")).thenReturn(false);
         when(roleRepository.existsByName("Wibu")).thenReturn(true);
-        when(modelMapper.map(signupRequestDto,Customer.class)).thenReturn(customer);
         customerService.createCustomer(signupRequestDto);
-        verify(customerRepository).save(customer);
-
+        ArgumentCaptor<Customer>captor = ArgumentCaptor.forClass(Customer.class);
+        verify(customerRepository).save(captor.capture());
+        Customer customer1 = captor.getValue();
+        assertThat(customer1.getName(),is("Wibu"));
+        assertThat(customer1.getPass(),is("Wibu"));
+        assertThat(customer1.getRole().size(),is(1));
+//        List<String> role = customer1.getRole().stream().map(Role::getName).toList();
+//        assertThat(role.get(0),is("Wibu"));
     }
 
     @Test
     void deleteCustomer_ReturnSuccess_WhenCustomerNameExist(){
-        when(customerRepository.existsByName("Wibu")).thenReturn(true);
-        customerService.deleteCustomerByName("Wibu");
+        when(customerRepository.existsById(1L)).thenReturn(true);
+        customerService.deleteCustomerById(1L);
         verify(customerRepository,times(1)).deleteCustomerByName("Wibu");
     }
 
     @Test
     void deleteCustomer_ReturnException_WhenCustomerNameDoesNotExist(){
         CustomerException e = Assertions.assertThrows(CustomerException.class,
-                () -> customerService.deleteCustomerByName("Wibu"));
-        assertThat(e.getMessage(),is("Customer Wibu does not exist"));
+                () -> customerService.deleteCustomerById(1L));
+        assertThat(e.getMessage(),is("Customer id 1 does not exist"));
     }
 
     @Test

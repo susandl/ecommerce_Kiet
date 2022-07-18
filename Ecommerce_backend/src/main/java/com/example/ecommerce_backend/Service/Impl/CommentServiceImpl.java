@@ -10,7 +10,7 @@ import com.example.ecommerce_backend.Dto.Request.CommentRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CommentResponseDto;
 import com.example.ecommerce_backend.Exception.CommentNotFound;
 import com.example.ecommerce_backend.Exception.CustomerException;
-import com.example.ecommerce_backend.Exception.ProductNotFound;
+import com.example.ecommerce_backend.Exception.ProductException;
 import com.example.ecommerce_backend.Service.CommentService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -65,7 +65,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<Product> product = this.productRepository.findById(commentRequestDto.getProductId());
         Optional<Customer> customer = this.customerRepository.findById(commentRequestDto.getCustomerId());
         if (product.isEmpty()) {
-            throw new ProductNotFound(commentRequestDto.getProductId());
+            throw new ProductException(commentRequestDto.getProductId());
         }
         if (customer.isEmpty()) {
             throw new CustomerException(commentRequestDto.getCustomerId());
