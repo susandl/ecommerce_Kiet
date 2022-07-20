@@ -71,8 +71,6 @@ public class CustomerServiceImplTest {
     void getAllCustomer_ShouldReturnCustomerResponseList_WhenCustomerExist(){
         List<CustomerResponseDto> customerDtoList = mock(ArrayList.class);
         List<Customer> customerList = mock(ArrayList.class);
-        customerDtoList.add(customerResponseDto);
-        customerList.add(customer);
         Type listType = new TypeToken<List<CustomerResponseDto>>() {
         }.getType();
         when(customerRepository.findAll()).thenReturn(customerList);
@@ -83,7 +81,9 @@ public class CustomerServiceImplTest {
 
     @Test
     void getAllCustomer_ShouldReturnCustomerNotFound_WhenCustomerDoesNotExist(){
-        when(customerRepository.findAll()).thenReturn(null);
+        List<Customer> customerList = mock(ArrayList.class);
+        when(customerRepository.findAll()).thenReturn(customerList);
+        when(customerList.isEmpty()).thenReturn(true);
         CustomerException e = Assertions.assertThrows(CustomerException.class,
                 () -> customerService.getAllCustomer());
         assertThat(e.getMessage(),is("Customer List not found"));
@@ -92,16 +92,16 @@ public class CustomerServiceImplTest {
     @Test
     void createCustomer_ReturnCustomerException_WhenCustomerNameExists(){
         SignupRequestDto signupRequestDto = mock(SignupRequestDto.class);
-        when(customerRepository.existsByName("Wibu")).thenReturn(true);
+        when(customerRepository.existsByName(signupRequestDto.getUsername())).thenReturn(true);
         CustomerException e = Assertions.assertThrows(CustomerException.class,
                 () -> customerService.createCustomer(signupRequestDto));
-        assertThat(e.getMessage(),is("Customer Wibu exists"));
+        assertThat(e.getMessage(),is("Customer "+signupRequestDto.getUsername()+" exists"));
     }
 
     @Test
     void createCustomer_ReturnRoleNotFoundException_WhenRoleDoesNotExist(){
         SignupRequestDto signupRequestDto = new SignupRequestDto();
-        when(roleRepository.existsByName("Wibu")).thenReturn(false);
+        when(roleRepository.existsByName(signupRequestDto.getUsername())).thenReturn(false);
         ResourceNotFound e = Assertions.assertThrows(ResourceNotFound.class,
                 () -> customerService.createCustomer(signupRequestDto));
         assertThat(e.getMessage(),is("Role name not found"));

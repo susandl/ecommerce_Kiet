@@ -47,7 +47,8 @@ public class CategoryServiceImpl implements CategoryService {
         if (category.isEmpty()) {
             throw new CategoryException("Category " + id + " not found");
         }
-        CategoryResponseDto categoryResponseDto = modelMapper.map(category, CategoryResponseDto.class);
+        Category category1 = category.get();
+        CategoryResponseDto categoryResponseDto = modelMapper.map(category1, CategoryResponseDto.class);
         return categoryResponseDto;
     }
 
@@ -63,16 +64,16 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategoryById(Long id) {
         if (!categoryRepository.existsById(id)) {
-            throw new CustomerException("category " + id + " does not exists");
+            throw new CategoryException("category " + id + " does not exists");
         }
         categoryRepository.deleteById(id);
     }
 
     @Override
-    public void modifyCustomer(Long id, CategoryRequestDto categoryRequestDto) {
+    public void modifyCategory(Long id, CategoryRequestDto categoryRequestDto) {
         Optional<Category> category = categoryRepository.findById(id);
         if (category.isEmpty()) {
-            throw new CategoryException("Customer not found");
+            throw new CategoryException("Category not found");
         }
         Category result = category.get();
         modelMapper.map(categoryRequestDto,result);

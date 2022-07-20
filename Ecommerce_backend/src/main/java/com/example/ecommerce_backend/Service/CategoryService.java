@@ -1,9 +1,6 @@
 package com.example.ecommerce_backend.Service;
 
-import com.example.ecommerce_backend.Data.Entity.Category;
-import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Dto.Request.CategoryRequestDto;
-import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CategoryResponseDto;
 
 import java.util.List;
@@ -17,5 +14,5 @@ public interface CategoryService {
 
     void deleteCategoryById(Long id);
 
-    void modifyCustomer(Long id, CategoryRequestDto categoryRequestDto);
+    void modifyCategory(Long id, CategoryRequestDto categoryRequestDto);
 }

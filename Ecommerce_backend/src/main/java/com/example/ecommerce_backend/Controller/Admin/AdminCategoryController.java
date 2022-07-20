@@ -1,7 +1,6 @@
 package com.example.ecommerce_backend.Controller.Admin;
 
 import com.example.ecommerce_backend.Dto.Request.CategoryRequestDto;
-import com.example.ecommerce_backend.Dto.Request.CustomerRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CategoryResponseDto;
 import com.example.ecommerce_backend.Service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +39,7 @@ public class AdminCategoryController {
 
     @PutMapping("/update/{id}")
     public void updateCustomer(@Valid @RequestBody CategoryRequestDto dto, @PathVariable("id") Long id){
-        this.categoryService.modifyCustomer(id,dto);
+        this.categoryService.modifyCategory(id,dto);
     }
 
     @DeleteMapping("/delete/{id}")
