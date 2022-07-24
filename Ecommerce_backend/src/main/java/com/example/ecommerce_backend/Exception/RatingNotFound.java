@@ -6,6 +6,6 @@ public class RatingNotFound extends RuntimeException {
     }
 
     public RatingNotFound(String name) {
-        super("Rating list for product " + name + " not found");
+        super(name);
     }
 }

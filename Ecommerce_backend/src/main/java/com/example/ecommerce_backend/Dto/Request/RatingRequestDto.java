@@ -19,8 +19,6 @@ public class RatingRequestDto {
     private RatingId id;
     @NotNull
     private Long customerId;
-    @NotNull
-    private Long productId;
     @Min(value = 0)
     @Max(value = 5)
     private float point;

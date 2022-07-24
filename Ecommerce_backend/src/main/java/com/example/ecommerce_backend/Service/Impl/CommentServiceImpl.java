@@ -8,7 +8,7 @@ import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
 import com.example.ecommerce_backend.Data.Repo.ProductRepository;
 import com.example.ecommerce_backend.Dto.Request.CommentRequestDto;
 import com.example.ecommerce_backend.Dto.Response.CommentResponseDto;
-import com.example.ecommerce_backend.Exception.CommentNotFound;
+import com.example.ecommerce_backend.Exception.CommentException;
 import com.example.ecommerce_backend.Exception.CustomerException;
 import com.example.ecommerce_backend.Exception.ProductException;
 import com.example.ecommerce_backend.Service.CommentService;
@@ -40,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentResponseDto> getCommentsByProductId(Long id) {
         List<Comment> comments = this.commentRepository.findAllByProductId(id);
         if (comments.isEmpty()) {
-            throw new CommentNotFound();
+            throw new CommentException();
         }
         Type listType = new TypeToken<List<CommentResponseDto>>() {
         }.getType();
@@ -52,7 +52,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentResponseDto> getCommentsByProductName(String name) {
         List<Comment> comments = this.commentRepository.findAllByProductName(name);
         if (comments.isEmpty()) {
-            throw new CommentNotFound(name);
+            throw new CommentException("Comment list not found");
         }
         Type listType = new TypeToken<List<CommentResponseDto>>() {
         }.getType();
@@ -61,14 +61,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void createComment(CommentRequestDto commentRequestDto) {
-        Optional<Product> product = this.productRepository.findById(commentRequestDto.getProductId());
+    public void createComment(CommentRequestDto commentRequestDto,Long id) {
+        Optional<Product> product = this.productRepository.findById(id);
         Optional<Customer> customer = this.customerRepository.findById(commentRequestDto.getCustomerId());
         if (product.isEmpty()) {
-            throw new ProductException(commentRequestDto.getProductId());
+            throw new ProductException("Product id "+ id+ " not found");
         }
         if (customer.isEmpty()) {
-            throw new CustomerException(commentRequestDto.getCustomerId());
+            throw new CustomerException("Customer id "+ commentRequestDto.getCustomerId()+" not found");
         }
         Comment comment = new Comment(customer.get(), product.get(), commentRequestDto.getDetails());
         this.commentRepository.save(comment);

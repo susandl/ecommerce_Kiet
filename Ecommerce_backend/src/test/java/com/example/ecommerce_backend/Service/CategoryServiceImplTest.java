@@ -74,6 +74,7 @@ public class CategoryServiceImplTest {
     }
     @Test
     void getCategory_ShouldReturnCategoryException_WhenIdIsNotExist(){
+        when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
         CategoryException e = Assertions.assertThrows(CategoryException.class,
                 () -> categoryService.getCategoryById(1L));
         assertThat(e.getMessage(),is("Category 1 not found"));

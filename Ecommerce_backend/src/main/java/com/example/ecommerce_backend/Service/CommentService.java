@@ -13,5 +13,5 @@ public interface CommentService {
 
     List<CommentResponseDto> getCommentsByProductName(String name);
 
-    void createComment(CommentRequestDto commentRequestDto);
+    void createComment(CommentRequestDto commentRequestDto,Long id);
 }

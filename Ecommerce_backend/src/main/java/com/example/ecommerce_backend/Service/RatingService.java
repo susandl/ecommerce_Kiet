@@ -11,5 +11,5 @@ public interface RatingService {
 
     List<RatingResponseDto> getRatingsByProductName(String name);
 
-    void createRating(RatingRequestDto ratingRequestDto);
+    void createRating(RatingRequestDto dto,Long id);
 }

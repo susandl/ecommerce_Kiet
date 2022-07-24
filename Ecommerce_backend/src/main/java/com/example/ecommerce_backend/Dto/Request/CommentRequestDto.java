@@ -20,8 +20,6 @@ public class CommentRequestDto {
     @NotNull
     private Long customerId;
     @NotNull
-    private Long productId;
-    @NotNull
     private String details;
 
 }

@@ -29,9 +29,9 @@ public class RatingController {
         return this.ratingService.getRatingsByProductId(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createRating(@Valid @RequestBody RatingRequestDto ratingRequestDto) {
-        this.ratingService.createRating(ratingRequestDto);
+    public void createRating(@Valid @RequestBody RatingRequestDto ratingRequestDto,@PathVariable("id")Long id) {
+        this.ratingService.createRating(ratingRequestDto,id);
     }
 }

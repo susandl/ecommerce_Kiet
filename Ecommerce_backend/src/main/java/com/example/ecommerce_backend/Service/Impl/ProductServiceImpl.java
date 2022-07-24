@@ -51,9 +51,9 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto getProductById(Long id) {
         Optional<Product> product = productRepository.findById(id);
         if (product.isEmpty()) {
-            throw new ProductException("Product id"+id +" not found");
+            throw new ProductException("Product id "+id +" not found");
         }
-        ProductResponseDto productResponseDto = modelMapper.map(product, ProductResponseDto.class);
+        ProductResponseDto productResponseDto = modelMapper.map(product.get(), ProductResponseDto.class);
         return productResponseDto;
     }
 
@@ -89,7 +89,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void deleteProductById(Long id) {
         if (!productRepository.existsById(id)) {
-            throw new ProductException("product id" + id + " does not exists");
+            throw new ProductException("product id " + id + " does not exists");
         }
         productRepository.deleteById(id);
     }
@@ -100,9 +100,12 @@ public class ProductServiceImpl implements ProductService {
         if (product.isEmpty()) {
             throw new ProductException("Product not found");
         }
+        if (!categoryRepository.existsByName(dto.getCategoryName())) {
+            throw new CategoryException("Category " + dto.getCategoryName() + " not found");
+        }
+        Category category = categoryRepository.findByName(dto.getCategoryName());
         Product result = product.get();
         modelMapper.map(dto,result);
-        Category category = categoryRepository.findByName(dto.getCategoryName());
         result.setCategory(category);
         result.setUpdatedDate(LocalDateTime.now());
         productRepository.save(result);

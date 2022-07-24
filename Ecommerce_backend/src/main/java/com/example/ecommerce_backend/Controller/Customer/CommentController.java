@@ -27,9 +27,10 @@ public class CommentController {
         return this.commentService.getCommentsByProductId(id);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/create/{id}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createComment(@Valid @RequestBody CommentRequestDto commentRequestDto) {
-        this.commentService.createComment(commentRequestDto);
+    public void createComment(@Valid @RequestBody CommentRequestDto commentRequestDto,@PathVariable("id")Long id) {
+        this.commentService.createComment(commentRequestDto,id);
+
     }
 }

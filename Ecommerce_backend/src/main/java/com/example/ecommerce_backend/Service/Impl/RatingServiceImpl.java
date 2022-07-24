@@ -3,6 +3,7 @@ package com.example.ecommerce_backend.Service.Impl;
 import com.example.ecommerce_backend.Data.Entity.Customer;
 import com.example.ecommerce_backend.Data.Entity.Product;
 import com.example.ecommerce_backend.Data.Entity.Rating;
+import com.example.ecommerce_backend.Data.Entity.RatingId;
 import com.example.ecommerce_backend.Data.Repo.CustomerRepository;
 import com.example.ecommerce_backend.Data.Repo.ProductRepository;
 import com.example.ecommerce_backend.Data.Repo.RatingRepository;
@@ -61,11 +62,11 @@ public class RatingServiceImpl implements RatingService {
     }
 
     @Override
-    public void createRating(RatingRequestDto ratingRequestDto) {
-        Optional<Product> product = this.productRepository.findById(ratingRequestDto.getProductId());
+    public void createRating(RatingRequestDto ratingRequestDto, Long id) {
+        Optional<Product> product = this.productRepository.findById(id);
         Optional<Customer> customer = this.customerRepository.findById(ratingRequestDto.getCustomerId());
         if (product.isEmpty()) {
-            throw new ProductException(ratingRequestDto.getProductId());
+            throw new ProductException(id);
         }
         if (customer.isEmpty()) {
             throw new CustomerException(ratingRequestDto.getCustomerId());
