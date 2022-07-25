@@ -55,24 +55,24 @@ public class ProductServiceImplTest {
     }
 
     @Test
-    void getProductListByCategoryName_ShouldReturnProductList_WhenCategoryNameIsCorrect(){
+    void getProductListByCategoryId_ShouldReturnProductList_WhenCategoryNameIsCorrect(){
         List<Product> productList = mock(ArrayList.class);
         List<ProductResponseDto> productResponseDtoList = mock(ArrayList.class);
-        when(productRepository.findAllProductByCategoryName("Wibu")).thenReturn(productList);
+        when(productRepository.findAllProductByCategoryId(1L)).thenReturn(productList);
         Type listType = new TypeToken<List<ProductResponseDto>>() {
         }.getType();
         when(modelMapper.map(productList,listType)).thenReturn(productResponseDtoList);
-        List<ProductResponseDto> result = productService.getProductsByCategoryName("Wibu");
+        List<ProductResponseDto> result = productService.getProductsByCategoryId(1L);
         assertThat(result,is(productResponseDtoList));
     }
 
     @Test
-    void getProductListByCategoryName_ShouldReturnProductException_WhenCategoryNameIsNotCorrect(){
+    void getProductListByCategoryId_ShouldReturnProductException_WhenCategoryNameIsNotCorrect(){
         List<Product> productList = mock(ArrayList.class);
-        when(productRepository.findAllProductByCategoryName("Wibu")).thenReturn(productList);
+        when(productRepository.findAllProductByCategoryId(1L)).thenReturn(productList);
         when(productList.isEmpty()).thenReturn(true);
         ProductException e = Assertions.assertThrows(ProductException.class,
-                () -> productService.getProductsByCategoryName("Wibu"));
+                () -> productService.getProductsByCategoryId(1L));
         assertThat(e.getMessage(),is("Product List not found"));
     }
 

@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CommentRequestDto {
-    private CommentId id;
     @NotNull
     private Long customerId;
     @NotNull

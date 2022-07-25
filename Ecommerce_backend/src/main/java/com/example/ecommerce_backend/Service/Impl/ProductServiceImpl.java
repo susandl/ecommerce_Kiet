@@ -36,8 +36,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductResponseDto> getProductsByCategoryName(String name) {
-        List<Product> products = productRepository.findAllProductByCategoryName(name);
+    public List<ProductResponseDto> getProductsByCategoryId(Long id) {
+        List<Product> products = productRepository.findAllProductByCategoryId(id);
         if (products.isEmpty()) {
             throw new ProductException("Product List not found");
         }
