@@ -1,0 +1,18 @@
+.loginButton{
+    width: 200px;
+    border: none;
+    background-color: darkblue;
+    color: white;
+    padding: 7px 10px;
+    font-weight: 600;
+    border-radius: 10px;
+    margin-top: 30px;
+    cursor: pointer;
+}
+
+.input {
+    height: 20px;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
