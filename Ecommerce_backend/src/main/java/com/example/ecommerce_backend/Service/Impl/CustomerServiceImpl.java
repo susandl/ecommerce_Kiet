@@ -51,10 +51,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public CustomerResponseDto getCustomerByName(String name) {
-        Optional<Customer> customerOptional = Optional.ofNullable(customerRepository.findByName(name));
+    public CustomerResponseDto getCustomerById(Long id) {
+        Optional<Customer> customerOptional = customerRepository.findById(id);
         if (customerOptional.isEmpty()) {
-            throw new CustomerException("Customer " + name + " not found");
+            throw new CustomerException("Customer id" + id + " not found");
         }
         CustomerResponseDto customerResponseDto = this.modelMapper.map(customerOptional.get(), CustomerResponseDto.class);
         return customerResponseDto;

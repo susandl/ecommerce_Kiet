@@ -33,9 +33,9 @@ public class AdminCustomerController {
         this.customerService.createCustomer(dto);
     }
 
-    @GetMapping("/{name}")
-    public CustomerResponseDto getCustomerByName(@PathVariable("name") String name) {
-        return customerService.getCustomerByName(name);
+    @GetMapping("/{id}")
+    public CustomerResponseDto getCustomerById(@PathVariable("id") Long id) {
+        return customerService.getCustomerById(id);
     }
 
     @PutMapping("/update/{id}")

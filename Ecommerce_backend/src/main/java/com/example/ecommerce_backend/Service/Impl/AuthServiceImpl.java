@@ -74,6 +74,6 @@ public class AuthServiceImpl implements AuthService {
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
         System.out.println(roles.size());
-        return new JwtResponse(jwt, userDetails.getUsername(), roles);
+        return new JwtResponse(userDetails.getId(),jwt, userDetails.getUsername(), roles);
     }
 }

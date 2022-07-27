@@ -11,7 +11,7 @@ public interface CustomerService {
 
     List<CustomerResponseDto> getAllCustomer();
 
-    CustomerResponseDto getCustomerByName(String name);
+    CustomerResponseDto getCustomerById(Long id);
 
      void createCustomer(SignupRequestDto customer);
 

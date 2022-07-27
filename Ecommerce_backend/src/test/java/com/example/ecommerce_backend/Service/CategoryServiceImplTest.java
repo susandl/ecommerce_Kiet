@@ -51,7 +51,7 @@ public class CategoryServiceImplTest {
         Type listType = new TypeToken<List<CategoryResponseDto>>() {
         }.getType();
         when(categoryRepository.findAll()).thenReturn(categoryList);
-        when(modelMapper.map(categoryList,listType)).thenReturn(responseDtoList);
+        when(modelMapper.map(eq(categoryList),eq(listType))).thenReturn(responseDtoList);
         List<CategoryResponseDto> result = categoryService.getAllCategories();
         assertThat(result,is(responseDtoList));
     }

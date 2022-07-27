@@ -16,8 +16,8 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/{name}")
-    public CustomerResponseDto getCustomerByName(@PathVariable String name) {
-        return customerService.getCustomerByName(name);
+    @GetMapping("/{id}")
+    public CustomerResponseDto getCustomerById(@PathVariable Long id) {
+        return customerService.getCustomerById(id);
     }
 }

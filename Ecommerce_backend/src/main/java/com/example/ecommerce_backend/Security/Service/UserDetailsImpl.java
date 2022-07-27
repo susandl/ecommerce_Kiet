@@ -35,6 +35,8 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(customer.getId(), customer.getName(), new BCryptPasswordEncoder().encode(customer.getPass()), authorities);
     }
 
+    public Long getId() {return id;
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
@@ -69,4 +71,6 @@ public class UserDetailsImpl implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

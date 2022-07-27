@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -78,7 +79,7 @@ public class AdminProductControllerTest {
 
     @Test
     void createProduct_ShouldReturnCreate_WhenRequestCorrect() throws Exception {
-        ProductRequestDto productRequestDto = new ProductRequestDto("abc","abc",200L,"abc");
+        ProductRequestDto productRequestDto = new ProductRequestDto("abc","abc",200L,"abc", LocalDateTime.now(),LocalDateTime.now());
         mockMvc.perform(post("/admin/product/create")
                         .content(asJsonString(productRequestDto))
                         .contentType(MediaType.APPLICATION_JSON)
@@ -89,7 +90,7 @@ public class AdminProductControllerTest {
 
     @Test
     void updateProduct_ShouldReturnOK_WhenRequestCorrect() throws Exception {
-        ProductRequestDto productRequestDto = new ProductRequestDto("abc","abc",200L,"abc");
+        ProductRequestDto productRequestDto = new ProductRequestDto("abc","abc",200L,"abc",LocalDateTime.now(),LocalDateTime.now());
         mockMvc.perform(put("/admin/product/update/{id}",10L)
                         .content(asJsonString(productRequestDto))
                         .contentType(MediaType.APPLICATION_JSON)
